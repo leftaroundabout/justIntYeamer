@@ -20,10 +20,15 @@ executable justIntYeamer
   main-is:             Main.hs
   -- other-modules:       
   -- other-extensions:    
+  ghc-options:         -threaded "-with-rtsopts=-N4"
   build-depends:       base >=4.10 && <4.11
                        , yeamer >=0.1 && <0.2
                        , shakespeare
                        , numbered-semigroups
                        , TeX-my-math
+                       , lens
+                       , dynamic-plot>=0.3 && <0.4
+                       , diagrams-lib
+                       , diagrams-cairo
   -- hs-source-dirs:      
   default-language:    Haskell2010

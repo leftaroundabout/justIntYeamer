@@ -7,7 +7,14 @@ import Math.LaTeX.StringLiterals
 import Text.Cassius
 import Data.Semigroup.Numbered
 
+import Graphics.Dynamic.Plot.R2
+import qualified Diagrams.Prelude as Dia
+import qualified Diagrams.Backend.Cairo as Dia
+
 import System.Environment
+import Control.Lens
+import Control.Concurrent
+
 
 main :: IO ()
 main = yeamer . styling style $ do
@@ -20,10 +27,26 @@ main = yeamer . styling style $ do
      "A chord is a stack of thirds."
        ── do
       "What is a third?"
-      "Three semitones = minor third." │ "Four semitones = major third."
+      "Minor third = three semitones." │ "Major third = four semitones."
         ── do
        "What is a semitone?"
        "A semitone is ¹⁄₁₂th of an octave."
+      plotServ [ plotLatest [ continFnPlot ((+y₀) . f . (+t₀))
+                                  & plotDelay (1/40)
+                            | t₀ <- [0,1/20..] ]
+                  & legendName capt
+               | let wavefm t'
+                       | t < 1/3    = 3*(t*3)^2 - 2*(t*3)^3
+                       | otherwise  = let tA = (1 - t)/2
+                                      in 3*(tA*3)^2 - 2*(tA*3)^3
+                      where t = t' - fromIntegral (floor t' :: Int)
+                     sigs = [wavefm . (+sin (f*30)) . (*f) | f<-[4,5,6]]
+               , (y₀,capt,f)
+                   <- zip3 [0,-2..] ["4 Hz", "5 Hz", "6 Hz", "∑"]
+                        $ sigs ++ [foldr (\f g x -> f x+g x) (const 0) sigs]
+               ]
+          $ "Minor third = frequency ratio 5:6." │ "Major third = frequency ratio 4:5."
+       
 
 style = [cassius|
    body
@@ -57,3 +80,15 @@ style = [cassius|
      font-family: "Ubuntu Mono", "Droid Sans mono", "Courier New"
 
   |] ()
+
+plotServ :: [DynamicPlottable] -> Presentation -> Presentation
+plotServ pl cont = serverSide (forkIO (plotWindow pl >> return ()) >> return ())
+                     >> cont
+
+plotStat :: ViewportConfig -> [DynamicPlottable] -> Presentation
+plotStat viewCfg pl = imageFromFileSupplier "png" $ \file -> do
+    prerendered <- plotPrerender viewCfg pl
+    Dia.renderCairo file
+                    (Dia.mkSizeSpec $ Just (fromIntegral $ viewCfg^.xResV)
+                               Dia.^& Just (fromIntegral $ viewCfg^.yResV))
+                    prerendered
