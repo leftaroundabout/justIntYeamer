@@ -15,6 +15,9 @@ import System.Environment
 import Control.Lens
 import Control.Concurrent
 
+import Sound.File.Sndfile.Buffer.StorableVector
+import qualified Data.Vector.Storable as UArr
+
 
 main :: IO ()
 main = yeamer . styling style $ do
