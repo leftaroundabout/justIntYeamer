@@ -46,7 +46,7 @@ main = yeamer . styling style $ do
                    <- zip3 [0,-2..] ["4 Hz", "5 Hz", "6 Hz", "∑"]
                         $ sigs ++ [foldr (\f g x -> f x+g x) (const 0) sigs]
                ]
-          $ "Minor third = frequency ratio 5:6." │ "Major third = frequency ratio 4:5."
+          $ "Minor third = frequency ratio 6:5." │ "Major third = frequency ratio 5:4."
        
 
 style = [cassius|
