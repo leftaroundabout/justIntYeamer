@@ -54,7 +54,7 @@ main = yeamer . styling style $ do
 style = [cassius|
    body
      height: 100vh
-     color: #ccc
+     color: #cde
      background-color: #000
      font-size: 6vmin
      font-family: "Linux libertine", "Times New Roman"
@@ -67,6 +67,9 @@ style = [cassius|
      height: 95%
      text-align: center
      margin: auto
+     border-radius: 30px
+     border:10px solid rgba(90,80,40,0.3);
+     background: rgba(40,15,15,0.25);
    .headed-container
      height: 80%
    .vertical-concatenation
