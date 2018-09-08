@@ -4,6 +4,7 @@
 import Presentation.Yeamer
 import Presentation.Yeamer.Maths
 import Math.LaTeX.StringLiterals
+import qualified Text.Blaze.Html as Blaze
 import Text.Cassius
 import Data.Semigroup.Numbered
 
@@ -47,6 +48,23 @@ main = yeamer . styling style $ do
                         $ sigs ++ [foldr (\f g x -> f x+g x) (const 0) sigs]
                ]
           $ "Minor third = frequency ratio 6:5." │ "Major third = frequency ratio 5:4."
+
+   "Beamonad"
+     ====== do
+    (do
+     "Time-sequence content"
+     "like this")
+      ──staticContent(Blaze.preEscapedString"<pre>\n\
+\   do\n\
+\    \"Time-sequence content\"\n\
+\    \"like this\"")
+    ( "Juxtapose" │ "content"
+                 ──
+      "like"      │ "this" )
+      ──staticContent(Blaze.preEscapedString"<pre>\n\
+\      \"Juxtapose\" │ \"content\"\n\
+\                 ──\n\
+\      \"like\"      │ \"this\"")
        
 
 style = [cassius|
@@ -82,7 +100,11 @@ style = [cassius|
      font-size: 86%
      background-color: #227
      font-family: "Ubuntu Mono", "Droid Sans mono", "Courier New"
-
+   pre
+     text-align: left
+     font-size: 86%
+     background-color: #204
+     font-family: "Ubuntu Mono", "Droid Sans mono", "Courier New"
   |] ()
 
 plotServ :: [DynamicPlottable] -> Presentation -> Presentation
