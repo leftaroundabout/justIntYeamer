@@ -4,7 +4,6 @@
 import Presentation.Yeamer
 import Presentation.Yeamer.Maths
 import Math.LaTeX.StringLiterals
-import qualified Text.Blaze.Html as Blaze
 import Text.Cassius
 import Data.Semigroup.Numbered
 
@@ -54,17 +53,17 @@ main = yeamer . styling style $ do
     (do
      "Time-sequence content"
      "like this")
-      ──staticContent(Blaze.preEscapedString"<pre>\n\
-\   do\n\
-\    \"Time-sequence content\"\n\
-\    \"like this\"")
+      ──[plaintext|
+          do
+           "Time-sequence content"
+           "like this" |]
     ( "Juxtapose" │ "content"
                  ──
       "like"      │ "this" )
-      ──staticContent(Blaze.preEscapedString"<pre>\n\
-\      \"Juxtapose\" │ \"content\"\n\
-\                 ──\n\
-\      \"like\"      │ \"this\"")
+      ──[plaintext|
+           "Juxtapose" │ "content"
+                      ──
+            "like"     │ "this" |]
        
 
 style = [cassius|
