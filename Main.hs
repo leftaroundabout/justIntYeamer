@@ -50,13 +50,6 @@ main = yeamer . styling style $ do
 
    "Beamonad"
      ====== do
-    (do
-     "Time-sequence content"
-     "like this")
-      ──[plaintext|
-          do
-           "Time-sequence content"
-           "like this" |]
     ( "Juxtapose" │ "content"
                  ──
       "like"      │ "this" )
@@ -64,6 +57,13 @@ main = yeamer . styling style $ do
            "Juxtapose" │ "content"
                       ──
             "like"     │ "this" |]
+    (do
+     "Time-sequence content"
+     "like this")
+      ──[plaintext|
+          do
+           "Time-sequence content"
+           "like this" |]
        
 
 style = [cassius|
