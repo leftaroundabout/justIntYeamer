@@ -52,11 +52,27 @@ main = yeamer . styling style $ do
      ====== do
     ( "Juxtapose" │ "content"
                  ──
-      "like"      │ "this" )
+        "like"    │  "this"   )
       ──[plaintext|
-           "Juxtapose" │ "content"
-                      ──
-            "like"     │ "this" |]
+      "Juxtapose" │ "content"
+                 ──
+        "like"    │  "this"   |]
+    ( "Juxtapose" ||| "content"
+                  ===
+        "like"    |||  "this" )
+      ──do
+     [plaintext|
+      "Juxtapose" ||| "content"
+                  ===
+        "like"    |||  "this" |]
+     [plaintext|
+    (("Juxtapose" ||| "content")
+                  ===
+        "like")   |||  "this" |]
+     [plaintext|
+    (("Juxtapose" ||| "content")
+                  ===
+                "like"          )   |||  "this" |]
     (do
      "Time-sequence content"
      "like this")
