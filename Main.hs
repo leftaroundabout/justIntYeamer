@@ -4,8 +4,11 @@
 import Presentation.Yeamer
 import Presentation.Yeamer.Maths
 import Math.LaTeX.StringLiterals
+import Text.Hamlet
 import Text.Cassius
+import Data.Semigroup
 import Data.Semigroup.Numbered
+import Data.String.Combinators (fromShow)
 
 import Graphics.Dynamic.Plot.R2
 import qualified Diagrams.Prelude as Dia
@@ -80,6 +83,14 @@ main = yeamer . styling style $ do
           do
            "Time-sequence content"
            "like this" |]
+    
+   "The tree of notes"
+    ====== do
+     foldr1 (──)
+      [ fromShow ν<>" Hz"
+       <> useFileSupplier "wav" (makeTone 1 $ 2*ν) (\f ->
+           [shamlet| <audio controls loop src=#{f}> |] )
+      | ν <- [110, 220, 247.5, 275, 293.4] ]
        
 
 style = [cassius|
