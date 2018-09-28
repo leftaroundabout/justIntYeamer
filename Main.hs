@@ -21,6 +21,7 @@ import System.Environment
 import Control.Monad
 import Control.Lens
 import Control.Concurrent
+import Data.Function (fix)
 
 import Sound.Tone.Simple
 
@@ -87,6 +88,20 @@ main = yeamer . styling style $ do
           do
            "Time-sequence content"
            "like this" |]
+   
+   "Hydra"
+    ======
+     fix (\h -> "head" >>= \() -> h │ h
+                                   ──
+                                  h │ h )
+    ── do [plaintext|
+           fix (\h -> "head" >>= \() -> h │ h
+                                         ──
+                                        h │ h ) |]
+          [plaintext|
+           fix (\h -> "head" >> h │ h
+                                 ──
+                                h │ h ) |]
     
    forM_ [ \f -> [shamlet| <audio controls      src=#{f}> |]
          , \f -> [shamlet| <audio controls loop src=#{f}> |] ] $ \audioUsage ->
