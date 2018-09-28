@@ -18,6 +18,7 @@ import qualified Diagrams.Prelude as Dia
 import qualified Diagrams.Backend.Cairo as Dia
 
 import System.Environment
+import Control.Monad
 import Control.Lens
 import Control.Concurrent
 
@@ -87,17 +88,18 @@ main = yeamer . styling style $ do
            "Time-sequence content"
            "like this" |]
     
-   "A simple tetrachord of notes"
-    ====== do
-     let ν₀ = 110
-     foldr1 (──)
-      [ (fromString (showFFloat (Just 0) ν "")
-            <>" Hz ( = "<>(fromIntegral (numerator rat)
-                          /fromIntegral (denominator rat) × 110⁀"Hz" :: Math) $<>")")
-       <> useFileSupplier "wav" (makeTone 1 $ 2*ν) (\f ->
-           [shamlet| <audio controls loop src=#{f}> |] )
-      | rat <- [1, 2, 9/4, 5/2, 8/3]
-      , let ν = fromRational rat * ν₀ ]
+   forM_ [ \f -> [shamlet| <audio controls      src=#{f}> |]
+         , \f -> [shamlet| <audio controls loop src=#{f}> |] ] $ \audioUsage ->
+     "A simple tetrachord of notes"
+      ====== do
+       let ν₀ = 110
+       foldr1 (──)
+        [ (fromString (showFFloat (Just 0) ν "")
+              <>" Hz ( = "<>(fromIntegral (numerator rat)
+                            /fromIntegral (denominator rat) × 110⁀"Hz" :: Math) $<>")")
+         <> useFileSupplier "wav" (makeTone 1 $ 2*ν) audioUsage
+        | rat <- [1, 2, 9/4, 5/2, 8/3]
+        , let ν = fromRational rat * ν₀ ]
     
        
 
