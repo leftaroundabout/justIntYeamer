@@ -9,6 +9,9 @@ import Text.Cassius
 import Data.Semigroup
 import Data.Semigroup.Numbered
 import Data.String.Combinators (fromShow)
+import GHC.Exts (fromString)
+import Numeric (showFFloat)
+import Data.Ratio
 
 import Graphics.Dynamic.Plot.R2
 import qualified Diagrams.Prelude as Dia
@@ -84,13 +87,18 @@ main = yeamer . styling style $ do
            "Time-sequence content"
            "like this" |]
     
-   "The tree of notes"
+   "A simple tetrachord of notes"
     ====== do
+     let ν₀ = 110
      foldr1 (──)
-      [ fromShow ν<>" Hz"
+      [ (fromString (showFFloat (Just 0) ν "")
+            <>" Hz ( = "<>(fromIntegral (numerator rat)
+                          /fromIntegral (denominator rat) × 110⁀"Hz" :: Math) $<>")")
        <> useFileSupplier "wav" (makeTone 1 $ 2*ν) (\f ->
            [shamlet| <audio controls loop src=#{f}> |] )
-      | ν <- [110, 220, 247.5, 275, 293.4] ]
+      | rat <- [1, 2, 9/4, 5/2, 8/3]
+      , let ν = fromRational rat * ν₀ ]
+    
        
 
 style = [cassius|
@@ -144,3 +152,4 @@ plotStat viewCfg pl = imageFromFileSupplier "png" $ \file -> do
                     (Dia.mkSizeSpec $ Just (fromIntegral $ viewCfg^.xResV)
                                Dia.^& Just (fromIntegral $ viewCfg^.yResV))
                     prerendered
+
