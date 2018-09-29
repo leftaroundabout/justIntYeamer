@@ -56,6 +56,19 @@ main = yeamer . styling style $ do
                         $ sigs ++ [foldr (\f g x -> f x+g x) (const 0) sigs]
                ]
           $ "Minor third = frequency ratio 6:5." │ "Major third = frequency ratio 5:4."
+     "A chord is a compound of notes whose pitches are at a small integral ratio."
+   
+   "Temperaments"
+     ====== do
+      "Approximations of rationals by logarithmically regular grid:"
+       <> maths [ [ fromIntegral (numerator r)/fromIntegral (denominator r)
+                         ⩵ fromString (showFFloat (Just 3) (fromRational r :: Double) "")
+                  , fromString (showFFloat (Just 3) (2**(fromIntegral n/12) :: Double) "")
+                         ⩵ 2◝(fromIntegral n/12)
+                       :: Math ]
+                | (r,n) <- [ (3/2, 7)
+                           , (5/4, 4)
+                           , (6/5, 3) ] ]""
 
    "Beamonad"
      ====== do
