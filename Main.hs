@@ -109,16 +109,32 @@ main = yeamer . styling style $ do
       ====== do
        let ν₀ = 110
        foldr1 (──)
-        [ (fromString (showFFloat (Just 0) ν "")
-              <>" Hz ( = "<>(fromIntegral (numerator rat)
+        [ (dispFreq ν
+              <>" ( = "<>(fromIntegral (numerator rat)
                             /fromIntegral (denominator rat) × 110⁀"Hz" :: Math) $<>")")
-         <> useFileSupplier "wav" (makeTone $ simpleTone & frequency .~ 2*ν) audioUsage
+         <> useFileSupplier "wav" (makeTone $ simpleTone & frequency .~ ν) audioUsage
         | rat <- [1, 2, 9/4, 5/2, 8/3]
         , let ν = fromRational rat * ν₀ ]
     
+   forM_ [id, ("compact-style"#%)] $ \mdf -> mdf $
+    "The tree of 5-limit notes"
+    ====== do
+     let node ν = do
+          () <- dispFreq ν
+          node (ν*2)
+           ── ("thisfreq"#%dispFreq ν<>":"<>serveTone (simpleTone & frequency .~ ν))
+           ── node (ν*3) │ node (ν*5)
+     node 55
+
+dispFreq :: Frequency -> Presentation
+dispFreq ν = fromString $ showFFloat (Just 0) ν " Hz"
        
 simpleTone :: ToneSpec
 simpleTone = ToneSpec 440 1 1 1
+
+serveTone :: ToneSpec -> Presentation
+serveTone spec = useFileSupplier "wav" (makeTone spec)
+   $ \f -> [shamlet| <audio controls loop src=#{f}> |]
 
 style = [cassius|
    body
@@ -129,6 +145,8 @@ style = [cassius|
      font-family: "Linux libertine", "Times New Roman"
    .main-title
      font-size: 180%
+   .thisfreq
+     font-weight: bold
    h1
      font-size: 150%
    div
@@ -138,6 +156,15 @@ style = [cassius|
      margin: auto
      border-radius: 30px
      border:10px solid rgba(90,80,40,0.3);
+     background: rgba(40,15,15,0.25);
+   .compact-style div
+     font-size: 86%
+     width: 98%
+     height: 98%
+     text-align: center
+     margin: auto
+     border-radius: 5px
+     border:3px solid rgba(90,80,40,0.3);
      background: rgba(40,15,15,0.25);
    .headed-container
      height: 80%
