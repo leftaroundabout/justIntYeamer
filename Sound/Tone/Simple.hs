@@ -10,7 +10,8 @@
 {-# LANGUAGE TemplateHaskell     #-}
 
 module Sound.Tone.Simple ( Frequency, Duration, Amplitude
-                         , ToneSpec(ToneSpec), frequency, duration, loudness, decayTime
+                         , ToneSpec(ToneSpec)
+                         , frequency, duration, loudness, decayTime, evenHarmonicsContent
                          , makeTone ) where
     
 import qualified Sound.File.Sndfile as HSnd
@@ -29,6 +30,7 @@ data ToneSpec = ToneSpec
       { _frequency :: !Frequency
       , _duration :: !Duration
       , _loudness :: !Amplitude
+      , _evenHarmonicsContent :: !Amplitude
       , _decayTime :: !Duration
       }
 makeLenses ''ToneSpec
@@ -46,7 +48,8 @@ makeTone spec tgt = fmap mempty . HSnd.writeFile info tgt
              -> let φ = ω'Spl*i
                     t = tSpl*i
                  in round $ fromIntegral (maxBound :: Int16)
-                            * overdrive (ampl * (sin φ + sin (2*φ)) * exp (-6*t))
+                            * overdrive (ampl * (sin φ + spec^.evenHarmonicsContent*sin (2*φ))
+                                          * exp (-6*t))
                       :: Int16
  where info = HSnd.Info nSpl (round νSample) 1 sndFormat 1 True
        nSpl = round $ spec^.duration * νSample

@@ -140,6 +140,20 @@ main = yeamer . styling style $ do
            ── ("thisfreq"#%labelling ν<>":"<>serveTone (simpleTone & frequency .~ ν))
            ── node (ν*5/4) │ node (ν*3/2)
      node ν₀
+    
+   forM_ [ (("compact-style"#%), nameForFreq, 55*2**(-1/3)) ]
+      $ \(mdf, labelling, ν₀) -> mdf $
+    "The tree of odd-11-limit notes"
+    ====== do
+     let node ν = do
+          () <- labelling ν<>"..."
+          node (ν*3) │ node (ν*11/3)
+           ── ("thisfreq"#%labelling ν<>":"<>serveTone
+                             (simpleTone & frequency .~ ν
+                                         & loudness .~ 2
+                                         & evenHarmonicsContent .~ 0))
+           ── node (ν*5/3) │ node (ν*7/3)
+     node ν₀
 
 dispFreq :: Frequency -> Presentation
 dispFreq ν = fromString $ showFFloat (Just 0) ν " Hz"
@@ -157,7 +171,7 @@ nameForFreq ν = decorate $ words
           n  -> (++replicate (n-1) '\'') . map toLower
        
 simpleTone :: ToneSpec
-simpleTone = ToneSpec 440 1 1 1
+simpleTone = ToneSpec 440 1 1 1 1
 
 serveTone :: ToneSpec -> Presentation
 serveTone spec = useFileSupplier "wav" (makeTone spec)
