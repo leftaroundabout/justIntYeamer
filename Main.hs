@@ -12,6 +12,7 @@ import Data.String.Combinators (fromShow)
 import GHC.Exts (fromString)
 import Numeric (showFFloat)
 import Data.Ratio
+import Data.Char (toLower)
 
 import Graphics.Dynamic.Plot.R2
 import qualified Diagrams.Prelude as Dia
@@ -123,7 +124,7 @@ main = yeamer . styling style $ do
     "The tree of 5-limit notes"
     ====== do
      let node ν = do
-          () <- labelling ν
+          () <- labelling ν<>"..."
           node (ν*2)
            ── ("thisfreq"#%labelling ν<>":"<>serveTone (simpleTone & frequency .~ ν))
            ── node (ν*5/4) │ node (ν*3/2)
@@ -133,10 +134,15 @@ dispFreq :: Frequency -> Presentation
 dispFreq ν = fromString $ showFFloat (Just 0) ν " Hz"
 
 nameForFreq :: Frequency -> Presentation
-nameForFreq ν = fromString $ words "C C♯ D E♭ E F F♯ G G♯ A B♭ B"
+nameForFreq ν = decorate $ words "C C♯ D E♭ E F F♯ G G♯ A B♭ B"
                  !! floor ((relC - fromIntegral octv)*12)
  where relC = logBase 2 (ν / (55*2**(-9.5/12)))
        octv = floor relC
+       decorate = (fromString("octave_"++show octv)#%) . fromString . case octv of
+          -1 -> (++",")
+          0  -> id
+          1  -> map toLower
+          n  -> (++replicate (n-1) '\'') . map toLower
        
 simpleTone :: ToneSpec
 simpleTone = ToneSpec 440 1 1 1
@@ -166,6 +172,20 @@ style = [cassius|
      border-radius: 30px
      border:10px solid rgba(90,80,40,0.3);
      background: rgba(40,15,15,0.25);
+   .octave_-1
+     color: red
+   .octave_0
+     color: orange
+   .octave_1
+     color: yellow
+   .octave_2
+     color: green
+   .octave_3
+     color: cyan
+   .octave_4
+     color: blue
+   .octave_5
+     color: violet
    .compact-style div
      font-size: 86%
      width: 98%
