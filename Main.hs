@@ -129,6 +129,17 @@ main = yeamer . styling style $ do
            ── ("thisfreq"#%labelling ν<>":"<>serveTone (simpleTone & frequency .~ ν))
            ── node (ν*5/4) │ node (ν*3/2)
      node ν₀
+    
+   forM_ [ (("compact-style"#%), nameForFreq, 110*2**(-1/3)) ]
+      $ \(mdf, labelling, ν₀) -> mdf $
+    "The tree of 7-limit notes"
+    ====== do
+     let node ν = do
+          () <- labelling ν<>"..."
+          node (ν*2) │ node (ν*7/4)
+           ── ("thisfreq"#%labelling ν<>":"<>serveTone (simpleTone & frequency .~ ν))
+           ── node (ν*5/4) │ node (ν*3/2)
+     node ν₀
 
 dispFreq :: Frequency -> Presentation
 dispFreq ν = fromString $ showFFloat (Just 0) ν " Hz"
@@ -173,18 +184,20 @@ style = [cassius|
      border:10px solid rgba(90,80,40,0.3);
      background: rgba(40,15,15,0.25);
    .octave_-1
-     color: red
+     color: black
    .octave_0
-     color: orange
+     color: red
    .octave_1
-     color: yellow
+     color: orange
    .octave_2
-     color: green
+     color: yellow
    .octave_3
-     color: cyan
+     color: green
    .octave_4
-     color: blue
+     color: cyan
    .octave_5
+     color: blue
+   .octave_6
      color: violet
    .compact-style div
      font-size: 86%
