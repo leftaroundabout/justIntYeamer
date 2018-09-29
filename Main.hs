@@ -123,7 +123,7 @@ main = yeamer . styling style $ do
           () <- dispFreq ν
           node (ν*2)
            ── ("thisfreq"#%dispFreq ν<>":"<>serveTone (simpleTone & frequency .~ ν))
-           ── node (ν*3) │ node (ν*5)
+           ── node (ν*5/4) │ node (ν*3/2)
      node 55
 
 dispFreq :: Frequency -> Presentation
