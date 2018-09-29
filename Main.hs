@@ -19,6 +19,7 @@ import qualified Diagrams.Prelude as Dia
 import qualified Diagrams.Backend.Cairo as Dia
 
 import System.Environment
+import System.Process (runCommand)
 import Control.Monad
 import Control.Lens
 import Control.Concurrent
@@ -37,6 +38,7 @@ main = yeamer . styling style $ do
      "A chord is a stack of thirds."
        ── do
       "What is a third?"
+      serverSide $ runCommand "pasuspender pianoteq" >> return ()
       "Minor third = three semitones." │ "Major third = four semitones."
         ── do
        "What is a semitone?"
