@@ -7,8 +7,11 @@
 -- Stability   : experimental
 -- Portability : portable
 -- 
+{-# LANGUAGE TemplateHaskell     #-}
 
-module Sound.Tone.Simple (Frequency, Duration, makeTone) where
+module Sound.Tone.Simple ( Frequency, Duration, Amplitude
+                         , ToneSpec(ToneSpec), frequency, duration, loudness, decayTime
+                         , makeTone ) where
     
 import qualified Sound.File.Sndfile as HSnd
 import qualified Sound.File.Sndfile.Buffer.StorableVector as HSnd
@@ -16,10 +19,19 @@ import qualified Data.StorableVector as UArr
 
 import Data.Int
 import Control.Arrow
+import Control.Lens
 
 type Frequency = Double  -- In Hertz
 type Duration = Double   -- In seconds
-type Amplitude = Double
+type Amplitude = Double  -- 1 = full scale
+
+data ToneSpec = ToneSpec
+      { _frequency :: !Frequency
+      , _duration :: !Duration
+      , _loudness :: !Amplitude
+      , _decayTime :: !Duration
+      }
+makeLenses ''ToneSpec
 
 νSample :: Frequency
 νSample = 44100
@@ -27,8 +39,8 @@ type Amplitude = Double
 overdrive :: Amplitude -> Amplitude
 overdrive p = p / (1 + p^2)
 
-makeTone :: Duration -> Frequency -> FilePath -> IO ()
-makeTone t ν tgt = fmap mempty . HSnd.writeFile info tgt
+makeTone :: ToneSpec -> FilePath -> IO ()
+makeTone spec tgt = fmap mempty . HSnd.writeFile info tgt
           . HSnd.toBuffer . UArr.sample nSpl
          $ fromIntegral >>> \i
              -> let φ = ω'Spl*i
@@ -37,10 +49,10 @@ makeTone t ν tgt = fmap mempty . HSnd.writeFile info tgt
                             * overdrive (ampl * (sin φ + sin (2*φ)) * exp (-6*t))
                       :: Int16
  where info = HSnd.Info nSpl (round νSample) 1 sndFormat 1 True
-       nSpl = round $ t * νSample
-       ω'Spl = 2*pi*ν/νSample
+       nSpl = round $ spec^.duration * νSample
+       ω'Spl = 2*pi*spec^.frequency/νSample
        tSpl = 1/νSample
-       ampl = 10 / sqrt ν
+       ampl = spec^.loudness * 10 / sqrt (spec^.frequency)
 
 sndFormat :: HSnd.Format
 sndFormat = HSnd.Format {

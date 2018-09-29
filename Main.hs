@@ -112,11 +112,13 @@ main = yeamer . styling style $ do
         [ (fromString (showFFloat (Just 0) ν "")
               <>" Hz ( = "<>(fromIntegral (numerator rat)
                             /fromIntegral (denominator rat) × 110⁀"Hz" :: Math) $<>")")
-         <> useFileSupplier "wav" (makeTone 1 $ 2*ν) audioUsage
+         <> useFileSupplier "wav" (makeTone $ simpleTone & frequency .~ 2*ν) audioUsage
         | rat <- [1, 2, 9/4, 5/2, 8/3]
         , let ν = fromRational rat * ν₀ ]
     
        
+simpleTone :: ToneSpec
+simpleTone = ToneSpec 440 1 1 1
 
 style = [cassius|
    body
