@@ -116,18 +116,27 @@ main = yeamer . styling style $ do
         | rat <- [1, 2, 9/4, 5/2, 8/3]
         , let ν = fromRational rat * ν₀ ]
     
-   forM_ [id, ("compact-style"#%)] $ \mdf -> mdf $
+   forM_ [ (id, dispFreq, 55)
+         , (("compact-style"#%), dispFreq, 55)
+         , (("compact-style"#%), nameForFreq, 55*2**(-1/3)) ]
+      $ \(mdf, labelling, ν₀) -> mdf $
     "The tree of 5-limit notes"
     ====== do
      let node ν = do
-          () <- dispFreq ν
+          () <- labelling ν
           node (ν*2)
-           ── ("thisfreq"#%dispFreq ν<>":"<>serveTone (simpleTone & frequency .~ ν))
+           ── ("thisfreq"#%labelling ν<>":"<>serveTone (simpleTone & frequency .~ ν))
            ── node (ν*5/4) │ node (ν*3/2)
-     node 55
+     node ν₀
 
 dispFreq :: Frequency -> Presentation
 dispFreq ν = fromString $ showFFloat (Just 0) ν " Hz"
+
+nameForFreq :: Frequency -> Presentation
+nameForFreq ν = fromString $ words "C C♯ D E♭ E F F♯ G G♯ A B♭ B"
+                 !! floor ((relC - fromIntegral octv)*12)
+ where relC = logBase 2 (ν / (55*2**(-9.5/12)))
+       octv = floor relC
        
 simpleTone :: ToneSpec
 simpleTone = ToneSpec 440 1 1 1
