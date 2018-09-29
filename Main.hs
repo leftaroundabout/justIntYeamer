@@ -145,9 +145,10 @@ dispFreq :: Frequency -> Presentation
 dispFreq ν = fromString $ showFFloat (Just 0) ν " Hz"
 
 nameForFreq :: Frequency -> Presentation
-nameForFreq ν = decorate $ words "C C♯ D E♭ E F F♯ G G♯ A B♭ B"
-                 !! floor ((relC - fromIntegral octv)*12)
- where relC = logBase 2 (ν / (55*2**(-9.5/12)))
+nameForFreq ν = decorate $ words
+       "C𝅗𝅥 C C𝄽 C♯ D𝅗𝅥 D D𝄽 E♭ E𝅗𝅥 E E𝄽 F F𝄽 F♯ G𝅗𝅥 G G𝄽 G♯ A𝅗𝅥 A A𝄽 B♭ B𝅗𝅥 B B𝄽"
+                 !! floor ((relC - fromIntegral octv)*24)
+ where relC = logBase 2 (ν / (55*2**(-9.75/12)))
        octv = floor relC
        decorate = (fromString("octave_"++show octv)#%) . fromString . case octv of
           -1 -> (++",")
