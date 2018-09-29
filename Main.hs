@@ -62,7 +62,7 @@ main = yeamer . styling style $ do
    
    "Temperaments"
      ====== do
-      "Approximations of rationals by logarithmically regular grid:"
+      "Approximations of 5-limit rationals by logarithmically regular grid (12-edo):"
        <> maths [ [ fromIntegral (numerator r)/fromIntegral (denominator r)
                          ⩵ fromString (showFFloat (Just 3) (fromRational r :: Double) "")
                   , fromString (showFFloat (Just 3) (2**(fromIntegral n/12) :: Double) "")
@@ -71,6 +71,16 @@ main = yeamer . styling style $ do
                 | (r,n) <- [ (3/2, 7)
                            , (5/4, 4)
                            , (6/5, 3) ] ]""
+      "Approximations of 7-limit rationals by logarithmically regular grid (31-edo):"
+       <> maths [ [ fromIntegral (numerator r)/fromIntegral (denominator r)
+                         ⩵ fromString (showFFloat (Just 3) (fromRational r :: Double) "")
+                  , fromString (showFFloat (Just 3) (2**(fromIntegral n/31) :: Double) "")
+                         ⩵ 2◝(fromIntegral n/31)
+                       :: Math ]
+                | (r,n) <- [ (3/2, 18)
+                           , (5/4, 10)
+                           , (7/4, 25)
+                           , (11/9, 9) ] ]""
 
    "Beamonad"
      ====== do
