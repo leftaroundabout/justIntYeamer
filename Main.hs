@@ -29,6 +29,14 @@ import Sound.Tone.Simple
 
 main :: IO ()
 main = yeamer . styling style $ do
+   ""──
+     "main-title"#%
+       "(Ab)using a monadic screen-presentation eDSL as a just-intonation synth pad controller"
+     ──
+     "Justus Sagemüller"
+     ──
+     "reference"#%("Institut für Geophysik und Meteorologie"──"Universität zu Köln")
+   
    "Just Intonation"
      ====== do
     "What is harmony?"
@@ -210,7 +218,7 @@ style = [cassius|
      font-size: 6vmin
      font-family: "Linux libertine", "Times New Roman"
    .main-title
-     font-size: 180%
+     font-size: 150%
    .thisfreq
      font-weight: bold
    h1
