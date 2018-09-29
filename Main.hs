@@ -123,6 +123,19 @@ main = yeamer . styling style $ do
            "Time-sequence content"
            "like this" |]
    
+   forM_ [ \f -> [shamlet| <audio controls      src=#{f}> |]
+         , \f -> [shamlet| <audio controls loop src=#{f}> |] ] $ \audioUsage ->
+     "A simple tetrachord of notes"
+      ====== do
+       let ν₀ = 110
+       foldr1 (──)
+        [ (dispFreq ν
+              <>" ( = "<>(fromIntegral (numerator rat)
+                            /fromIntegral (denominator rat) × 110⁀"Hz" :: Math) $<>")")
+         <> useFileSupplier "wav" (makeTone $ simpleTone & frequency .~ ν) audioUsage
+        | rat <- [1, 2, 9/4, 5/2, 8/3]
+        , let ν = fromRational rat * ν₀ ]
+    
    "Hydra"
     ======
      fix (\h -> "head" >>= \() -> h │ h
@@ -136,19 +149,6 @@ main = yeamer . styling style $ do
            fix (\h -> "head" >> h │ h
                                  ──
                                 h │ h ) |]
-    
-   forM_ [ \f -> [shamlet| <audio controls      src=#{f}> |]
-         , \f -> [shamlet| <audio controls loop src=#{f}> |] ] $ \audioUsage ->
-     "A simple tetrachord of notes"
-      ====== do
-       let ν₀ = 110
-       foldr1 (──)
-        [ (dispFreq ν
-              <>" ( = "<>(fromIntegral (numerator rat)
-                            /fromIntegral (denominator rat) × 110⁀"Hz" :: Math) $<>")")
-         <> useFileSupplier "wav" (makeTone $ simpleTone & frequency .~ ν) audioUsage
-        | rat <- [1, 2, 9/4, 5/2, 8/3]
-        , let ν = fromRational rat * ν₀ ]
     
    forM_ [ (id, dispFreq, 55)
          , (("compact-style"#%), dispFreq, 55)

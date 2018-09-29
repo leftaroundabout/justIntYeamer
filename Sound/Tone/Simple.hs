@@ -48,7 +48,7 @@ makeTone spec tgt = fmap mempty . HSnd.writeFile info tgt
              -> let φ = ω'Spl*i
                     t = tSpl*i
                  in round $ fromIntegral (maxBound :: Int16)
-                            * overdrive (ampl * (sin φ + spec^.evenHarmonicsContent*sin (2*φ))
+                     * overdrive (ampl * (sin φ + spec^.evenHarmonicsContent*sin (2*φ))
                                           * exp (-6*t))
                       :: Int16
  where info = HSnd.Info nSpl (round νSample) 1 sndFormat 1 True
