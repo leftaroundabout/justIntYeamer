@@ -203,6 +203,23 @@ main = yeamer . styling style $ do
           t <- serverSide getCurrentTime
           fromString $ show t |]
 
+   forM_ [ (("compact-style"#%), nameForFreq, 55*2**(-1/3)) ]
+      $ \(mdf, labelling, ν₀) -> mdf $
+    "The tree of 5-limit notes"
+    ====== do
+     let node ν = do
+          () <- labelling ν<>"..."
+          ttIn <- serverSide getCurrentTime
+          () <- labelling ν<>"..?"
+          ttOut <- serverSide getCurrentTime
+          let tNote = fromIntegral (round $ diffUTCTime ttOut ttIn * 2) / 2
+          node (ν*2)
+           ── ("thisfreq"#%(labelling ν)<>":"<>serveTone (simpleTone
+                                                   & duration .~ tNote
+                                                   & frequency .~ ν ))
+           ── node (ν*5/4) │ node (ν*3/2)
+     node ν₀
+    
 
 dispFreq :: Frequency -> Presentation
 dispFreq ν = fromString $ showFFloat (Just 0) ν " Hz"
