@@ -23,11 +23,13 @@ executable justIntYeamer
   ghc-options:         -threaded "-with-rtsopts=-N4"
   build-depends:       base >=4.10 && <4.11
                        , process
+                       , time
                        , yeamer >=0.1 && <0.2
                        , shakespeare
                        , numbered-semigroups
                        , TeX-my-math
                        , lens
+                       , flat >= 0.3.2 && < 0.4
                        , dynamic-plot>=0.3 && <0.4
                        , diagrams-lib
                        , diagrams-cairo

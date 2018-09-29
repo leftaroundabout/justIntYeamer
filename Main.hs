@@ -20,6 +20,10 @@ import qualified Diagrams.Backend.Cairo as Dia
 
 import System.Environment
 import System.Process (runCommand)
+import Data.Time.Clock
+import Data.Time.Clock.POSIX
+import Data.Flat (Flat(..))
+
 import Control.Monad
 import Control.Lens
 import Control.Concurrent
@@ -187,6 +191,18 @@ main = yeamer . styling style $ do
                                          & evenHarmonicsContent .~ 0))
            ── node (ν*5/3) │ node (ν*7/3)
      node ν₀
+   
+   "Using the monad capability for time control"
+    ====== (do
+     "Want to know the time?"
+     t <- serverSide getCurrentTime
+     fromString $ show t)
+    ── [plaintext|
+        do
+          "Want to know the time?"
+          t <- serverSide getCurrentTime
+          fromString $ show t |]
+
 
 dispFreq :: Frequency -> Presentation
 dispFreq ν = fromString $ showFFloat (Just 0) ν " Hz"
@@ -289,3 +305,8 @@ plotStat viewCfg pl = imageFromFileSupplier "png" $ \file -> do
                                Dia.^& Just (fromIntegral $ viewCfg^.yResV))
                     prerendered
 
+
+instance Flat UTCTime where
+  decode = fmap (posixSecondsToUTCTime . realToFrac . (id::Double->Double)) decode
+  encode = encode . (id::Double->Double) . realToFrac . utcTimeToPOSIXSeconds
+  size = size . (id::Double->Double) . realToFrac . utcTimeToPOSIXSeconds
