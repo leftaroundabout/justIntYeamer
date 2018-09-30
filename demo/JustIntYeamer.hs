@@ -3,28 +3,6 @@
 
 import Commons
 
-import Presentation.Yeamer
-import Presentation.Yeamer.Maths
-import Math.LaTeX.StringLiterals
-import Text.Hamlet
-import Data.Semigroup
-import Data.Semigroup.Numbered
-import GHC.Exts (fromString)
-import Numeric (showFFloat)
-import Data.Ratio
-
-import Graphics.Dynamic.Plot.R2
-
-import System.Process (runCommand)
-import Data.Time.Clock
-import Data.Time.Clock.POSIX
-import Data.Flat (Flat(..))
-
-import Control.Monad
-import Control.Lens
-import Data.Function (fix)
-
-import Sound.Tone.Simple
 
 main :: IO ()
 main = yeamer . styling style $ do

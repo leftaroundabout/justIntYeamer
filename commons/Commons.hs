@@ -1,7 +1,29 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes       #-}
 
-module Commons where
+module Commons ( module Commons
+               , module Presentation.Yeamer
+               , module Presentation.Yeamer.Maths
+               , module Math.LaTeX.StringLiterals
+               , module Text.Hamlet
+               , module Data.Semigroup
+               , module Data.Semigroup.Numbered
+               , module GHC.Exts
+               , module Numeric
+               , module Data.Ratio
+
+               , module Graphics.Dynamic.Plot.R2
+
+               , module System.Process
+               , module Data.Time.Clock
+               , module Data.Time.Clock.POSIX
+               , module Data.Flat
+
+               , module Control.Monad
+               , module Control.Lens
+               , module Data.Function
+
+               , module Sound.Tone.Simple ) where
 
 import Presentation.Yeamer
 import Presentation.Yeamer.Maths
@@ -25,7 +47,7 @@ import Data.Time.Clock.POSIX
 import Data.Flat (Flat(..))
 
 import Control.Monad
-import Control.Lens
+import Control.Lens hiding ((...), set, (>$))
 import Control.Concurrent
 import Data.Function (fix)
 
