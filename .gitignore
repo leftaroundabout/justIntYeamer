@@ -13,3 +13,5 @@ bin/
 *.lock
 .#*
 .ipynb_checkpoints
+.pseudo-static-content
+*.aes
