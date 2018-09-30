@@ -19,6 +19,7 @@ cabal-version:       >=1.10
 executable justIntYeamer
   main-is:             Main.hs
   other-modules:       Sound.Tone.Simple
+                       Commons
   -- other-extensions:    
   ghc-options:         -threaded "-with-rtsopts=-N4"
   build-depends:       base >=4.10 && <4.11
