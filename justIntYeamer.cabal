@@ -44,3 +44,8 @@ executable justIntYeamer-demo
   main-is:             demo/JustIntYeamer.hs
   build-depends:   base, justIntYeamer
   ghc-options:         -threaded "-with-rtsopts=-N4"
+
+executable justIntYeamer-performance
+  main-is:             performance/JustIntYeamer.hs
+  build-depends:   base, justIntYeamer
+  ghc-options:         -threaded "-with-rtsopts=-N4"
